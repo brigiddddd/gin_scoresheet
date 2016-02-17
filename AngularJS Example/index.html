@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<body>
+
+<!-- ng-app tells AngularJS that the <div> element is the "Owner" of the application -->
+<!-- The ng-app directive defines the application -->
+<!-- The ng-controller directive defines the controller -->
+<!-- ng-init initializes AngularJS application variables -->
+<div ng-app="myApp" ng-controller="myCtrl" ng-init="myCol='lightblue'">
+
+    <!-- ng-model binds value of input field to application variable name -->
+    <p>Name : <input type="text" ng-model="name"></p>
+
+    <!-- ng-bind binds innerHTML of <p> element to application variable name -->
+    <p>The name is <span ng-bind="name"></span></p>
+
+    <!-- AngularJS expressions are written inside double braces: {{ expression }} -->
+    <h1>Hello {{name}}</h1>
+
+    First Name: <input type="text" ng-model="firstName"><br>
+    Last Name: <input type="text" ng-model="lastName"><br>
+    <br>
+    Full Name: {{firstName + " " + lastName}}
+
+    <input style="background-color:{{myCol}}" ng-model="myCol" value="{{myCol}}">
+</div>
+
+<script src="myApp.js"></script>
+<script src="myCtrl.js"></script>
+
+<div ng-app="" ng-init="names=[
+{name:'Jani',country:'Norway'},
+{name:'Hege',country:'Sweden'},
+{name:'Kai',country:'Denmark'}]">
+
+<ul>
+  <li ng-repeat="x  in names">
+    {{ x.name + ', ' + x.country }}
+  </li>
+</ul>
+
+</div>
+
+</body>
+</html>

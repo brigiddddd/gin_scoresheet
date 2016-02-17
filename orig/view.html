@@ -1,0 +1,22 @@
+<!--View
+ what's presented to the users, how users interact
+
+-->
+ <html>
+ <script>
+ View.EventsDialog = function(CalendarEvent) {
+   var html = '<div><h2>{name}</h2>' +
+              '<div class="date">{date}</div></div>';
+   html = html.replace(/{[^}]*}/g, function(key){
+        return CalendarEvent[key.slice(1,-1)] || '';
+        });
+   var el = document.getElementById('eventshell');
+   el.innerHTML = html;
+}
+var Events.data = {
+   '112': { 'name': 'Party time!', 'date': '2009-10-31' },
+   '113': { 'name': 'Pressies!', 'date': '2009-12-25' }
+}
+
+View.EventsDialog(Events.data['112']); // edits item 112
+  /<script>
