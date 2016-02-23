@@ -1,18 +1,22 @@
+<!-- PAGE WITH INFO NEEDED TO ADD A SCORE -->
 <div>
+    <link rel="stylesheet" type="text/css" href="main.css">
     <form>
-        <input type="radio" name="winner" value="player1"> {{}} <br>
-        <input type="radio" name="winner" value="player2"> {{}} <br>
-
         <select>
-            <option value="knock"> Knock </option>
-            <option value="gin"> Gin </option>
-            <option value="undercut"> Undercut </option>
+            <option value="player1"> {{ Player 1 }} </option>
+            <option value="player2"> {{ Player 2 }} </option>
         </select>
-
-        <div>
-            <input type="text" name="points"><br>
-        </div>
-
-        <input type="submit" value="Ok">
+        <select>
+            <option value="knock"> knocked </option>
+            <option value="gin"> ginned </option>
+            <option value="undercut"> undercut </option>
+        </select>
+        . <br><br> {{ Other Player }} had
+        <input type="text" name="points" maxlength="3" min="0" class="pointsInput">
+        points in hand.
+        <br>
+        <br>
+        <input type="submit" value="OK">
+        <input type="submit" value="Cancel">
     </form>
 </div>
