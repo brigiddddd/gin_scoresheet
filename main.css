@@ -6,13 +6,13 @@ table {
     border-collapse: collapse;
 }
 
-div.game th, div.game td {
+div.gameTables th, div.gameTables td, li {
     padding: 15px;
-    text-align: left;
     text-align: center;
+    vertical-align: text-top
 }
 
-div.game tr:nth-child(even) {background-color: #f2f2f2}
+div.gameTables li:nth-child(even) {background-color: #f2f2f2}
 
 table#gameNumber1 th {
     background-color: #4CAF50;
@@ -28,3 +28,4 @@ table#gameNumber3 th{
     background-color: #995EB3;
     color: white;
 }
+
