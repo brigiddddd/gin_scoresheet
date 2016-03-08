@@ -1,0 +1,30 @@
+.pointsInput {
+    width: 30px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+div.game th, div.game td {
+    padding: 15px;
+    text-align: left;
+    text-align: center;
+}
+
+div.game tr:nth-child(even) {background-color: #f2f2f2}
+
+table#gameNumber1 th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+table#gameNumber2 th{
+    background-color: #41C3C7;
+    color: white;
+}
+
+table#gameNumber3 th{
+    background-color: #995EB3;
+    color: white;
+}

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -9,7 +9,8 @@
         <title>Hollywood Gin</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <script data-main="js/main" src="js/lib/require.js"></script>
+        <script data-main="js/main" src="main.js"></script>
+        <link rel="stylesheet" type="text/css" href="main.css">
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -22,7 +23,200 @@
 
         <p>Hollywood Gin Scoresheet</p>
 
+        Player 1: <b class="player1"></b>
+        <br>
+        Player 2: <b class="player2"></b>
+        <br>
+
+        <div class="inputButtons">
+            <table>
+                <tr>
+                    <td>
+                    <input id="updatePlayers" type="submit" value="Update Players" onClick="showUpdatePlayers()">
+                    </td>
+                    </tr><tr>
+                    <td>
+                        <input id="addScore" type="submit" value="Add Score" onClick="showAddScore()">
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- INFO NEEDED TO ADD A SCORE -->
+        <div id="scoreInput" style='display:none;'>
+            <form>
+                <select id="playerSelect">
+                    <option value="selectPlayer" disabled="true" selected="selected">Select Player</option>
+                    <option value="player1" class="player1" id="p1NameSelect"></option>
+                    <option value="player2" class="player2" id="p1NameSelect"></option>
+                </select>
+                <select>
+                    <option value="selectAction" disabled="true" selected="selected">Select Action</option>
+                    <option value="knock"> knocked </option>
+                    <option value="gin"> ginned </option>
+                    <option value="undercut"> undercut </option>
+                </select>
+                . <br><br> {{ Other Player }} had
+                <br>
+                <input type="text" name="points" maxlength="3" min="0" class="pointsInput">
+                points in hand.
+                <br>
+                <br>
+                <input type="submit" value="OK" onClick="updateScore()">
+                <input type="submit" value="Cancel" onClick="clearScoresheet()">
+            </form>
+        </div>
+
+        <!-- INPUT FIELDS AND BUTTON TO UPDATE PLAYER NAMES -->
+        <div id="playersInput" style='display:none;'>
+            <br>
+            <br>
+            <form id="players">
+                Player 1: <input type="text" id="player1Input" >
+                <br>
+                Player 2: <input type="text" id="player2Input" >
+                <br>
+                <input id="submitNames" type="submit" value="Submit" onclick="updatePlayers()">
+                <br>
+            </form>
+        </div>
+
+        <div class="game gameTables" >
+            <!--<table class="gameTable game" id="gameTable" >
+                <tr>
+                    <td class="gameTable1"></td>
+                    <td class="gameTable2"></td>
+                    <td class="gameTable3"></td>
+                </tr>
+            </table>-->
+
+        </div>
+
+        <template class="singleGame game">
+            <table class="game" style="float:left;">
+                <thead>
+                    <tr class="gameNumber game">
+                        <th colspan=2 class="gameHeader"></th>
+                    </tr>
+                    <tr class="playerNames">
+                        <th>
+                            <label class="player1" id="p1Name"></label>
+                        </th>
+                        <th>
+                            <label class="player2" id="p2Name"></label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="points">
+                    <tr>
+                        <td>a</td>
+                        <td>b</td>
+                    </tr>
+                    <tr>
+                        <td>c</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>e</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>g</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                <tfoot >
+                    <tr class="gameScores" id="gameScores">
+                        <th>
+                            <label class="p1Score">c</label>
+                        </th>
+                        <th>
+                            <label class="p2Score">d</label>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </template>
+
 
     </body>
+
+    <script type="text/javascript">
+
+        function setPlayerNames(players) {
+            var player1Refs = document.getElementsByClassName("player1");
+            for (var i = 0; i < player1Refs.length; i++) {
+                player1Refs[i].innerHTML = players.player1;
+            }
+
+            var player2Refs = document.getElementsByClassName("player2");
+            for (var i = 0; i < player2Refs.length; i++) {
+                player2Refs[i].innerHTML = players.player2;
+            }
+        }
+
+        function toggle_visibility(id) {
+           var e = document.getElementById(id);
+           if(e.style.display == 'block')
+              e.style.display = 'none';
+           else
+              e.style.display = 'block';
+        }
+
+        function showUpdatePlayers() {
+            toggle_visibility("playersInput");
+        }
+
+        function showAddScore() {
+            toggle_visibility("scoreInput");
+        }
+
+        function updatePlayers() {
+            var inputPlayers = {};
+            inputPlayers.player1 = document.getElementById("player1Input").value;
+            inputPlayers.player2 = document.getElementById("player2Input").value;
+
+            setPlayerNames(inputPlayers);
+        }
+
+        function addTemplate(gameNo) {
+            // Test to see if the browser supports the HTML template element by checking
+            // for the presence of the template element's content attribute.
+            if ('content' in document.createElement('template')) {
+                // Instantiate the table with the existing HTML tbody and the row with the template
+                var template = document.querySelector('.singleGame'),
+                td = template.content.querySelectorAll("th");
+                td[0].textContent = "Game " + gameNo;
+
+                table = template.content.querySelector("table");
+                table.id = "gameNumber" + gameNo;
+
+                // Clone the new row and insert it into the table
+                var gameTable = document.getElementsByClassName("gameTables");
+                var clone = document.importNode(template.content, true);
+                gameTable[0].appendChild(clone);
+            } else {
+                // Find another way to add the rows to the table because
+                // the HTML template element is not supported.
+            }
+        }
+
+        </script>
+
+        <script>
+        var players = { "player1":"Brigid", "player2":"Will" };
+
+        addTemplate(1);
+        addTemplate(2);
+        addTemplate(3);
+
+        setPlayerNames(players);
+
+        </script>
 </html>
-<!-- http://www.codeproject.com/Articles/584519/Beginners-Guide-Creating-Web-Applications-with-Jav -->
+
+
+
+
+
+
