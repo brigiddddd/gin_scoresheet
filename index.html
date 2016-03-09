@@ -50,7 +50,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td> Use Knock Card: </td>
+                        <td> Use Virtual Knock Card: </td>
                         <td>
                             <input type="checkbox" name="useKnockCard" value="Knock" class="useKnockCard" id="useKnockCard"></input>
                         </td>
@@ -174,4 +174,16 @@
             </tr>
         </template>
     </body>
+    <foot id="totals" style="display:none;">
+        Player1:
+        <p>Boxes: <div id="p1Boxes"></div> </p>
+        <p>Total: <div id="p1GrandTotal"></div> </p>
+        Player2:
+        <p>Boxes: <div id="p2Boxes"></div> </p>
+        <p>Total: <div id="p2GrandTotal"></div> </p>
+
+        Difference:
+        <p>Boxes: <div id="diffBoxes"></div></p>
+        <p>Points: <div id="diffPoints"></div></p>
+    </foot>
 </html>

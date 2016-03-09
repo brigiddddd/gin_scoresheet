@@ -10,8 +10,9 @@ var usingKnockCard;
 var spadesAreDouble;
 var isKnockSuitSpades;
 
-var p1Scores = [[1,2,3,"X","X",4], [2,3,"X","X",4], [3,"X","X",4]];
-var p2Scores = [[10,"X",12,8], [12,8],[8]];
+var p1ScoreArray = [[1]];
+var p2ScoreArray = [[1]];
+var endedGamesArray = [];
 
 ///////////////////////////////////////////////////////////
 //////////////////// GENERAL FUNCITONS ////////////////////
@@ -136,10 +137,6 @@ function updatePlayerReferences(className, playerName) {
     }
 }
 
-function addScoreToArray() {
-
-}
-
 function clearBody() {
     var currentBodies = document.getElementsByClassName("points");
     for (var i=0; i<currentBodies.length; i++) {
@@ -149,22 +146,25 @@ function clearBody() {
 
 function updateBody() {
     var games = document.getElementsByClassName("gameTable");
-    var gameMax = Math.max(p1Scores.length,p2Scores.length);
+    var gameMax = Math.max(p1ScoreArray.length,p2ScoreArray.length);
     var maxPointsLength = 0;
     for (var gameIndex=0; gameIndex<gameMax; gameIndex++) {
         var currentGameTable = games[gameIndex];
         var addItHere = currentGameTable.getElementsByClassName("points");
-        var currentMaxPointsLength = Math.max(p1Scores[gameIndex].length, p2Scores[gameIndex].length);
+        var currentMaxPointsLength = Math.max(p1ScoreArray[gameIndex].length, p2ScoreArray[gameIndex].length);
         maxPointsLength = Math.max(currentMaxPointsLength, maxPointsLength);
         for (var pointIndex=0; pointIndex<maxPointsLength; pointIndex++) {
-            console.log(p1Scores[gameIndex][pointIndex],p2Scores[gameIndex][pointIndex]);
-            if (p1Scores[gameIndex][pointIndex] === undefined) {
-                p1Scores[gameIndex][pointIndex] = "";
+            var p1Score = p1ScoreArray[gameIndex][pointIndex];
+            if (p1Score === undefined) {
+                p1Score = "";
             }
-            if (p2Scores[gameIndex][pointIndex] === undefined) {
-                p2Scores[gameIndex][pointIndex] = "";
+
+            var p2Score = p2ScoreArray[gameIndex][pointIndex];
+            if (p2Score === undefined) {
+                p2Score = "";
             }
-            addScoreTemplate(addItHere[0], p1Scores[gameIndex][pointIndex], p2Scores[gameIndex][pointIndex]);
+            
+            addScoreTemplate(addItHere[0], p1Score, p2Score);
         }
     }
 }
@@ -175,8 +175,19 @@ function updateScoreTable() {
     updateTotals();
 }
 
+function addScoreToArray() {
+    var scoreArray = getScoreAndBoxes();
+    var winner = document.getElementById("playerSelect").value;
+    if (winner === "player1") {
+        addP1Score(scoreArray);
+    } else {
+        addP2Score(scoreArray);
+    }
+}
+
 function updateScore() { // Triggered on submitScore click.
     addScoreToArray();
+    this.endedGamesArray = [];
     updateScoreTable();
     toggleAddScore();
     resetKnockCardParagraph();
@@ -290,10 +301,10 @@ function updateTotals() {
     var p2Total = document.getElementsByClassName("p2Total");
 
     for (var i = 0; i<getNumberOfGames(); i++) {
-        var calculatedTotalP1 = calculateTotal(p1Scores[i]);
+        var calculatedTotalP1 = calculateTotal(p1ScoreArray[i]);
         p1Total[i].innerHTML = calculatedTotalP1;
 
-        var calculatedTotalP2 = calculateTotal(p2Scores[i]);
+        var calculatedTotalP2 = calculateTotal(p2ScoreArray[i]);
         p2Total[i].innerHTML = calculatedTotalP2;
 
         var gameOver = checkGameOver(Math.max(calculatedTotalP1,calculatedTotalP2));
@@ -317,11 +328,8 @@ function checkGameOver(value) {
 }
 
 function endSingleGame(gameNumber) {
-    //Mark className as inactive.
-    var endedGame = document.getElementById("gameNumber" + gameNumber);
-    // TODO:
-    var endedGameScoreLists = endedGame.getElementsByClassName("score");
-    endedGameScoreLists.className = "score over";
+    // Add game number of ended game to array
+    getEndedGamesArray().push(gameNumber);
 
     if (gameNumber === getNumberOfGames()) {
         // Game is over.
@@ -329,11 +337,65 @@ function endSingleGame(gameNumber) {
     }
 }
 
+function singlePlayerBoxes(input) {
+    var count = 0;
+    for (var gameIndex=0; gameIndex<input.length; gameIndex++) {
+        count += input[gameIndex].length;
+    }
+    return count;
+}
+
+function totalBoxes() {
+    var p1Boxes = singlePlayerBoxes(p1ScoreArray);
+    var p2Boxes = singlePlayerBoxes(p2ScoreArray);
+
+    var p1BoxesDiv = document.getElementById("p1Boxes");
+    p1BoxesDiv.innerHTML = p1Boxes;
+
+    var p2BoxesDiv = document.getElementById("p2Boxes");
+    p2BoxesDiv.innerHTML = p2Boxes;
+
+    return p1Boxes - p2Boxes;
+}
+
+function singlePlayerTotals(className) {
+    var totals = document.getElementsByClassName(className);
+    var total = 0;
+    for (var i=0; i<totals.length; i++) {
+        total += parseInt(totals[i].innerHTML);
+    }
+    return total;
+}
+
+function totalPoints() {
+    var p1Total = singlePlayerTotals("p1Total");
+    var p2Total = singlePlayerTotals("p2Total");
+
+    var p1GrandTotalDiv = document.getElementById("p1GrandTotal");
+    p1GrandTotalDiv.innerHTML = p1Total;
+
+    var p2GrandTotalDiv = document.getElementById("p2GrandTotal");
+    p2GrandTotalDiv.innerHTML = p2Total;
+
+    return p1Total - p2Total;
+}
+
+function totalDifference(diffBoxes, diffPoints) {
+    var diffPointsDiv = document.getElementById("diffPoints");
+    diffPointsDiv.innerHTML = diffPoints;
+    var diffBoxesDiv = document.getElementById("diffBoxes");
+    diffBoxesDiv.innerHTML = diffBoxes;
+}
+
 function calculateWinner() {
-    // TODO:
-    totalBoxes();
-    totalPoints();
-    totalOwed();
+    // Hide addScoreButton
+    toggleVisibilityId("addScoreButton");
+    toggleVisibilityId("totals");
+
+    var diffBoxes = totalBoxes();
+    var diffPoints = totalPoints();
+    totalDifference(diffBoxes, diffPoints);
+    //totalOwed();
 }
 
 
@@ -447,40 +509,56 @@ function setIsKnockSuitSpades(knockSuit) {
     this.isKnockSuitSpades = (knockSuit === "&spades;")
 }
 
-function getP1Scores() {
-    return this.p1Scores;
+function getP1ScoreArray() {
+    return this.p1ScoreArray;
 }
 
 function addP1Score(input) {
-    if (this.p1Scores.length < getNumberOfGames()) {
+    if (this.p1ScoreArray.length < getNumberOfGames()) {
         // Add new game.
-        this.p1Scores.push([]);
+        this.p1ScoreArray.push([]);
     }
 
-    // Add input to all existing games.
-    for (var gameIndex=0; gameIndex<this.p1Scores.length; gameIndex++) {
+    var numberOfEndedGames = getNumberOfEndedGames();
+
+    // Add input to all active games.
+    for (var gameIndex=numberOfEndedGames; gameIndex<this.p1ScoreArray.length; gameIndex++) {
         for (var inputIndex=0; inputIndex<input.length; inputIndex++) {
-            newGame.push(input[inputIndex]);
+            this.p1ScoreArray[gameIndex].push(input[inputIndex]);
         }
     }
 }
 
 function addP2Score(input) {
-    if (this.p2Scores.length < getNumberOfGames()) {
+    if (this.p2ScoreArray.length < getNumberOfGames()) {
         // Add new game.
-        this.p2Scores.push([]);
+        this.p2ScoreArray.push([]);
     }
 
+    var numberOfEndedGames = getNumberOfEndedGames();
+
     // Add input to all existing games.
-    for (var gameIndex=0; gameIndex<this.p2Scores.length; gameIndex++) {
+    for (var gameIndex=numberOfEndedGames; gameIndex<this.p2ScoreArray.length; gameIndex++) {
         for (var inputIndex=0; inputIndex<input.length; inputIndex++) {
-            newGame.push(input[inputIndex]);
+            this.p2ScoreArray[gameIndex].push(input[inputIndex]);
         }
     }
 }
 
-function getP2Scores() {
-    return this.p2Scores;
+function getP2ScoreArray() {
+    return this.p2ScoreArray;
 }
 
-//todo: MAKE SCORE TABLE EDITABLE.
+function getEndedGamesArray() {
+    return this.endedGamesArray;
+};
+
+function getNumberOfEndedGames() {
+    return this.endedGamesArray.length;
+}
+
+// todo: MAKE SCORE TABLES EDITABLE??
+// todo: ONLY SHOW SPADES ARE DOUBLE IF USE KNOCK CARD IS CHECKED
+// TODO: Switch dropdowns to radio boxes.
+// TODO: switch to hand based data structure.
+// Fix starting from scratch errors. 
