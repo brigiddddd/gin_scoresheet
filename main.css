@@ -6,13 +6,17 @@ table {
     border-collapse: collapse;
 }
 
-div.gameTables th, div.gameTables td, li {
+tr.gameTables th, tr.gameTables td {
     padding: 15px;
     text-align: center;
     vertical-align: text-top
 }
 
-div.gameTables li:nth-child(even) {background-color: #f2f2f2}
+tr.score {
+    height: 50px;
+}
+
+tr.score:nth-child(even) {background-color: #f2f2f2}
 
 table#gameNumber1 th {
     background-color: #4CAF50;
@@ -29,3 +33,8 @@ table#gameNumber3 th{
     color: white;
 }
 
+#scoreInputForm {
+    background-color: #E8E8E8;
+    padding: 15px;
+    border: 2px solid black;
+}

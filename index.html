@@ -9,10 +9,10 @@
         <title>Hollywood Gin</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <script data-main="js/main" src="main.js"></script>
+        <script src="main.js"></script>
         <link rel="stylesheet" type="text/css" href="main.css">
     </head>
-    <body onload="initializeTable()">
+    <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser.
               Please <a href="http://browsehappy.com/">upgrade your browser</a>
@@ -22,55 +22,121 @@
         <!-- Add your site or application content here -->
 
         <h1>Hollywood Gin Scoresheet</h1>
-        <table>
-            <tr>
-                <td>Player 1:</td>
-                <td><div class="player1" id="player1" onblur="updatePlayer('player1', 'player1')" contenteditable></div></td>
-            </tr>
-            <tr>
-                <td>Player 2:</td>
-                <td><div class="player2" id="player2" onblur="updatePlayer('player2','player2')" contenteditable></div></td>
-            </tr>
+        <div class="preGame" style="display:block;">
+            <form id="preGameSetup" >
+                <table>
+                    <tr>
+                        <td>Player 1:</td>
+                        <td>
+                            <input type="text" id="player1Input" class="player1" value="Brigid"></input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Player 2:</td>
+                        <td>
+                            <input type="text" id="player2Input" class="player2" value="Will"></input>
+                        </td>
+                    </tr>
+                    <tr style="display:none;">
+                        <td> Number of Games: </td>
+                        <td>
+                            <input type="number" id="numberOfGames" class="numberOfGames" min="1" max="5" value="3"></input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> Play Games to: </td>
+                        <td>
+                            <input type="number" id="numberOfPoints" class="numberOfPoints" min="50" max="1000" value="150" step="10"></input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> Use Knock Card: </td>
+                        <td>
+                            <input type="checkbox" name="useKnockCard" value="Knock" class="useKnockCard" id="useKnockCard"></input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> Spades are Double: </td>
+                        <td>
+                            <input type="checkbox" name="spadesDouble" value="Double" class="spadesDouble" id="spadesDouble"></input>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
 
         <div class="inputButtons">
             <table>
-                <tr class="inputButton">
+                <tr class="inputButton preGame" style="display:block;">
                     <td>
-                        <input id="addScore" type="button" value="Add Score" onClick="showAddScore()">
-
+                        <input id="startGameButton" type="button" value="Start Game" onClick="startGame()">
                     </td>
                 </tr>
-                <tr class="inputForm">
-                    <td id="scoreInput" style="display:none;">
-                        <br>
-                        <form>
-                            <select id="playerSelect" onchange="pointsInputParagraph()">
-                                <option value="selectPlayer" disabled="true" selected="selected">Select Player</option>
-                                <option value="player1" class="player1" id="p1NameSelect"></option>
-                                <option value="player2" class="player2" id="p2NameSelect"></option>
-                            </select>
-                            <select>
-                                <option value="selectAction" disabled="true" selected="selected" >Select Action</option>
-                                <option value="knock"> knocked </option>
-                                <option value="gin"> ginned </option>
-                                <option value="undercut"> undercut </option>
-                            </select>
-                            <p id="pointsInputP"></p>
-                            <input id="submitScore" type="button" value="Add" onClick="updateScore();" >
-                            <input type="button" value="Cancel" onClick="showAddScore();" >
-                        </form>
+                <tr class="inputButton startGame" style="display:none;">
+                    <td>
+                        <input id="generateKnockCardButton" type="button" value="Pick Knock Card" onClick="getKnockCard()" style="display:none;"></input>
+                    </td>
+                </tr>
+                <tr class="inputButton startGame" style="display:none;">
+                    <td>
+                        <input id="addScoreButton" type="button" value="Add Score" onClick="toggleAddScore()" style="display:block;"></input>
                     </td>
                 </tr>
             </table>
         </div>
 
-        <br>
+        <div class="inputForm">
+            <form id="scoreInputForm" style="display:none;">
+                <table>
+                    <tr>
+                        <td>
+                            <select id="playerSelect" onchange="createPointsInputParagraph()">
+                                <option value="selectPlayer" disabled="true" selected="selected">Select Player</option>
+                                <option value="player1" class="player1Name" id="p1NameSelect"></option>
+                                <option value="player2" class="player2Name" id="p2NameSelect"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="actionSelect">
+                                <option value="selectAction" disabled="true" selected="selected">Select Action</option>
+                                <option value="knock"> knocked </option>
+                                <option value="gin"> ginned </option>
+                                <option value="undercut"> undercut </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan=2>
+                            <p id="pointsInputParagraph"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="cancelAddScoreButton" type="button" value="Cancel" onClick="toggleAddScore();" >
+                        </td>
+                        <td style="text-align:right">
+                            <input id="submitScore" type="button" value="Add" onClick="updateScore();" >
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
 
-        <div class="gameTables" >
-            <!-- Data is uploaded from addTemplate functionality -->
+        <div class="knockCard" >
+            <p id="knockCardParagraph" style="display:none;"></p>
+        </div>
+
+        <div id="gameTables">
+            <table>
+                <tr class="gameTables">
+                    <!-- Data is uploaded from addTemplate functionality -->
+                </tr>
+            </table>
+            
         </div>
 
         <template class="singleGame">
+          <td>
             <table class="gameTable" style="float:left;">
                 <thead>
                     <tr class="gameNumber">
@@ -78,262 +144,34 @@
                     </tr>
                     <tr class="playerNames">
                         <th>
-                            <label class="player1" id="p1Name"></label>
+                            <label class="player1Name" id="p1Name"></label>
                         </th>
                         <th>
-                            <label class="player2" id="p2Name"></label>
+                            <label class="player2Name" id="p2Name"></label>
                         </th>
                     </tr>
                 </thead>
                 <tbody class="points">
-                    <tr>
-                        <td>
-                            <ul class="p1Scores" style="list-style-type:none">
-                                <li onblur="updateTotals();" contenteditable>1</li>
-                                <li onblur="updateTotals();" contenteditable>9</li>
-                                <li onblur="updateTotals();" contenteditable>2</li>
-                                <li onblur="updateTotals();" contenteditable>8</li>
-                                <li onblur="updateTotals();" contenteditable>3</li>
-                                <li onblur="updateTotals();" contenteditable>7</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul class="p2Scores" style="list-style-type:none">
-                                <li>4</li>
-                                <li>23</li>
-                                <li>40</li>
-                                <li>10</li>
-                            </ul>
-                        </td>
-                    </tr>
                 </tbody>
-                <tfoot >
+                <tfoot>
                     <tr class="gameScores" id="gameScores">
                         <th>
-                            <label class="p1Total">100</label>
+                            <label class="p1Total"></label>
                         </th>
                         <th>
-                            <label class="p2Total">100</label>
+                            <label class="p2Total"></label>
                         </th>
                     </tr>
                 </tfoot>
             </table>
+            </td>
+        </template>
+
+        <template class="newScoreRow">
+            <tr class="score">
+                <td class="p1 score"></td>
+                <td class="p2 score"></td>
+            </tr>
         </template>
     </body>
-
-    <script type="text/javascript">
-        var activeClass = "gameTable active";
-        var inactiveClass = "gameTable";
-        var gamesHaveStarted = false;
-
-        function addTemplate(gameNo) {
-            // Test to see if the browser supports the HTML template element by checking
-            // for the presence of the template element's content attribute.
-            if ('content' in document.createElement('template')) {
-                // Instantiate the table with the existing HTML tbody and the row with the template
-                var template = document.querySelector('.singleGame'),
-                td = template.content.querySelectorAll("th");
-                td[0].textContent = "Game " + gameNo;
-
-                table = template.content.querySelector("table");
-                table.id = "gameNumber" + gameNo;
-
-                // Clone the new row and insert it into the table
-                var gameTable = document.getElementsByClassName("gameTables");
-                var clone = document.importNode(template.content, true);
-                gameTable[0].appendChild(clone);
-            } else {
-                // Find another way to add the rows to the table because
-                // the HTML template element is not supported.
-            }
-        }
-
-        function initializePlayerNames(players) {
-            updatePlayer("player1", "player1", players.player1);
-            updatePlayer("player2", "player2", players.player2);
-        }
-
-        function updatePlayer(id, className, playerName) {
-            if (!playerName) {
-                playerName = document.getElementById(id).innerHTML;
-            }
-            var playerRefs = document.getElementsByClassName(className);
-            for (var i = 0; i < playerRefs.length; i++) {
-                playerRefs[i].innerHTML = playerName;
-            }
-        }
-
-        function clearScoresheet() {
-            // TODO
-        }
-
-        function showAddScore() {
-           var e = document.getElementById("scoreInput");
-           if (e.style.display == 'block') {
-              e.style.display = 'none';
-           }
-           else {
-              e.style.display = 'block';
-              clearScoresheet();
-           }
-        }
-
-        function pointsInputParagraph() {
-            var selectElement = document.getElementById("playerSelect");
-            var selectedPlayerIndex = selectElement.selectedIndex;
-
-            var otherPlayerIndex = -1;
-            if (selectedPlayerIndex === 1) {
-                otherPlayerIndex = 2;
-            }
-            else if (selectedPlayerIndex === 2) {
-                otherPlayerIndex = 1;
-            }
-
-            if (otherPlayerIndex > 0) {
-                var otherPlayer = selectElement.options[otherPlayerIndex].text;
-            }
-
-            if (otherPlayer) {
-                var html = " had <input type='text' name='points' maxlength='3' min='0' class='pointsInput' > points in hand."
-                document.getElementById("pointsInputP").innerHTML = otherPlayer + html;
-            }
-        }
-
-        function calculate(input) {
-            // Ignore X or x.
-            if (input === "x" || input === "X") {
-                return 0;
-            }
-                // TODO: DO WE NEED +?? Should be done with button, right?
-            var total = 0;
-            var pieces = input.split("+");
-            for (var i=0; i<pieces.length; i++) {
-                total += parseInt(pieces[i]);
-            }
-            return total;
-        }
-        function calculateTotal(scoreList) {
-            var total = 0;
-            for (var i=0; i<scoreList.length; i++) {
-                total += calculate(scoreList[i].innerHTML);
-            }
-            return total;
-        }
-
-        function updateTotals() {
-            var p1Scores = document.getElementsByClassName("p1Scores");
-            var p2Scores = document.getElementsByClassName("p2Scores");
-
-            var p1Total = document.getElementsByClassName("p1Total");
-            var p2Total = document.getElementsByClassName("p2Total");
-
-            for (var i = 0; i<3; i++) {
-                var calculatedTotalP1 = calculateTotal(p1Scores[i].children);
-                p1Total[i].innerHTML = calculatedTotalP1;
-
-                var calculatedTotalP2 = calculateTotal(p2Scores[i].children);
-                p2Total[i].innerHTML = calculatedTotalP2;
-
-                var gameOver = checkGameOver(Math.max(calculatedTotalP1,calculatedTotalP2));
-                if (gameOver) {
-                    var gameNumber = i + 1;
-                    endGame(gameNumber);
-                }
-            }
-        }
-
-        function activateNextGame(numActiveGames, activeGames) {
-            // TODO: Determine which game needs to be activated and activate it.
-            if (numActiveGames === 3) {
-                // All games activated. Don't need to do anything.
-                return true;
-            }
-
-            var activeGameIds = [];
-            for (var i = 0; i < activeGames.length; i++) {
-                activeGameIds.push(activeGames[i].id);
-            }
-
-            if (activeGameIds.length === 0) {
-                // ACTIVATE FIRST GAME
-                var game1 = document.getElementById("gameNumber1");
-                game1.className = activeClass;
-
-                gamesHaveStarted = true;
-                return true;
-            }
-
-            else if (gamesHaveStarted === true) {
-                // ACTIVATE NEXT GAME
-                var lastGameId = activeGameIds.pop();
-                var lastGameNumber = lastGameId.substr(lastGameId.length - 1);
-                var nextGameNumber = parseInt(lastGameNumber) + 1;
-                var nextGameId = "gameNumber" + nextGameNumber;
-                var nextGame = document.getElementById(nextGameId);
-
-                if (nextGame) {
-                    nextGame.className = activeClass;
-                    return true;
-                }
-                else {
-                    // NEXT GAME DOESN'T EXIST. DON'T DO ANYTHING.
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        }
-
-        function addScoreItem() {
-            //TODO
-
-            var initiallyActiveGames = document.getElementsByClassName(activeClass);
-            var nextGame = activateNextGame(initiallyActiveGames.length, initiallyActiveGames);
-
-            if (nextGame) {
-                var activeGames = document.getElementsByClassName(activeClass);
-                for (var i=0; i < activeGames.length; i++) {
-                    console.log(activeGames[i]);
-                    // TODO
-                }
-            }
-            else {
-                // FIGURE OUT WHY IT FAILED. IT SHOULDN'T HAVE.
-            }
-        }
-
-        function updateScore() {
-            addScoreItem();
-            updateTotals();
-        }
-
-        function checkGameOver(value) {
-            if (parseInt(value) >= 100) {
-                 return true;
-            }
-            return false;
-        }
-
-        function endGame(gameNumber) {
-            //Mark class as inactive.
-            var endedGame = document.getElementById("gameNumber" + gameNumber);
-            endedGame.className = inactiveClass;
-        }
-
-        function initializeTable() {
-            addTemplate(1);
-            addTemplate(2);
-            addTemplate(3);
-
-            initializePlayerNames({player1:"Brigid",player2:"Will"});
-        }
-        </script>
-
 </html>
-
-
-
-
-
-
