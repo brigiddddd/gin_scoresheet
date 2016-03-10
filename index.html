@@ -69,7 +69,7 @@
             <table>
                 <tr class="inputButton preGame" style="display:block;">
                     <td>
-                        <input id="startGameButton" type="button" value="Start Game" onClick="startGame()">
+                        <input id="startGameButton" type="button" value="Start Game" onClick="onStartGame()">
                     </td>
                 </tr>
                 <tr class="inputButton startGame" style="display:none;">
@@ -79,7 +79,7 @@
                 </tr>
                 <tr class="inputButton startGame" style="display:none;">
                     <td>
-                        <input id="addScoreButton" type="button" value="Add Score" onClick="toggleAddScore()" style="display:block;"></input>
+                        <input id="addScoreButton" type="button" value="Add Score" onClick="onAddScoreButtonClick()" style="display:block;"></input>
                     </td>
                 </tr>
             </table>
@@ -90,32 +90,31 @@
                 <table>
                     <tr>
                         <td>
-                            <select id="playerSelect" onchange="createPointsInputParagraph()">
-                                <option value="selectPlayer" disabled="true" selected="selected">Select Player</option>
-                                <option value="player1" class="player1Name" id="p1NameSelect"></option>
-                                <option value="player2" class="player2Name" id="p2NameSelect"></option>
-                            </select>
+                            <input type="radio" name="playerRadio" onchange="handlePlayerRadioChange(this.value)" id="player1Radio" value="player1"><label for="player1Radio" class="player1Name"></label>
+                            <input type="radio" name="playerRadio" onchange="handlePlayerRadioChange(this.value)" id="player2Radio" value="player2"><label for="player2Radio" class="player2Name"></label>
                         </td>
+                    </tr>
+                    <tr>
                         <td>
-                            <select id="actionSelect">
-                                <option value="selectAction" disabled="true" selected="selected">Select Action</option>
-                                <option value="knock"> knocked </option>
-                                <option value="gin"> ginned </option>
-                                <option value="undercut"> undercut </option>
-                            </select>
+                            <input type="radio" name="actionRadio" onchange="setHandAction(this.value);" value="knock" id="knockRadio"></input>
+                            <label for="knockRadio">Knocked</label>
+                            <input type="radio" name="actionRadio" onchange="setHandAction(this.value);" value="gin" id="ginRadio"></input>
+                            <label for="ginRadio">Ginned</label>
+                            <input type="radio" name="actionRadio" onchange="setHandAction(this.value);" value="undercut" id="undercutRadio"></input>
+                            <label for="undercutRadio">Undercut</label>
                         </td>
                     </tr>
                     <tr>
                         <td colspan=2>
-                            <p id="pointsInputParagraph"></p>
+                            <p id="pointsInputParagraph"><label id="pointsInputName"></label> had <input type="text" name="points" maxlength="3" min="0" class="pointsInput" id="pointsInput"> points in hand.</p>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input id="cancelAddScoreButton" type="button" value="Cancel" onClick="toggleAddScore();" >
+                            <input id="cancelAddScoreButton" type="button" value="Cancel" onClick="onCancelAddScoreButtonClick();" >
                         </td>
                         <td style="text-align:right">
-                            <input id="submitScore" type="button" value="Add" onClick="updateScore();" >
+                            <input id="submitScoreButton" type="button" value="Add" onClick="onSubmitScoreButtonClick();" >
                         </td>
                     </tr>
                 </table>
@@ -151,7 +150,15 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="points">
+                <tbody class="boxes">
+                    <tr>
+                        <td>
+                            <table class="p1Boxes"></table>
+                        </td>
+                        <td>
+                            <table class="p2Boxes"></table>
+                        </td>
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr class="gameScores" id="gameScores">
@@ -168,22 +175,46 @@
         </template>
 
         <template class="newScoreRow">
-            <tr class="score">
-                <td class="p1 score"></td>
-                <td class="p2 score"></td>
+            <tr class="boxRow">
+                <td class="boxData"></td>
             </tr>
         </template>
     </body>
     <foot id="totals" style="display:none;">
-        Player1:
-        <p>Boxes: <div id="p1Boxes"></div> </p>
-        <p>Total: <div id="p1GrandTotal"></div> </p>
-        Player2:
-        <p>Boxes: <div id="p2Boxes"></div> </p>
-        <p>Total: <div id="p2GrandTotal"></div> </p>
-
-        Difference:
-        <p>Boxes: <div id="diffBoxes"></div></p>
-        <p>Points: <div id="diffPoints"></div></p>
+        <table>
+            <tr>
+                <td>
+                    <label class="player1Name"></label>
+                </td>
+                <td>
+                    <p>Boxes: <label id="p1Boxes"></label> </p>
+                </td>
+                <td>
+                    <p>Total: <label id="p1GrandTotal"></label> </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="player2Name"></label>
+                </td>
+                <td>
+                    <p>Boxes: <label id="p2Boxes"></label> </p>
+                </td>
+                <td>
+                    <p>Total: <label id="p2GrandTotal"></label> </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Difference:</label>
+                </td>
+                <td>
+                    <p>Boxes: <label id="diffBoxes"></label></p>
+                </td>
+                <td>
+                    <p>Points: <label id="diffPoints"></label></p>
+                </td>
+            </tr>
+        </table>
     </foot>
 </html>
