@@ -46,7 +46,7 @@
                     <tr>
                         <td> Play Games to: </td>
                         <td>
-                            <input type="number" id="numberOfPoints" class="numberOfPoints" min="50" max="1000" value="150" step="10"></input>
+                            <input type="number" id="numberOfPoints" class="numberOfPoints" min="50" max="1000" value="100" step="10"></input>
                         </td>
                     </tr>
                     <tr>
@@ -106,15 +106,22 @@
                     </tr>
                     <tr>
                         <td colspan=2>
-                            <p id="pointsInputParagraph"><label id="pointsInputName"></label> had <input type="text" name="points" maxlength="3" min="0" class="pointsInput" id="pointsInput"> points in hand.</p>
+                            <p id="pointsInputParagraph"><label id="pointsInputName"></label> had <input type="text" name="points" maxlength="3" min="0" class="pointsInput" id="pointsInput"> points.</p>
+                        </td>
+                    </tr>
+                    <tr id="isSpadeCheckboxRow" style="display:none;">
+                        <td>
+                            <input type="checkbox" name="isSpade" value="true" class="isSpade" id="isSpadeCheckbox"></input>
+                            <input name="isSpade" type="hidden" value="false" /> 
+                            <label for="isSpadeCheckbox">is a Spade</label>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input id="cancelAddScoreButton" type="button" value="Cancel" onClick="onCancelAddScoreButtonClick();" >
-                        </td>
-                        <td style="text-align:right">
                             <input id="submitScoreButton" type="button" value="Add" onClick="onSubmitScoreButtonClick();" >
+                        </td>
+                        <td>
+                            <input id="cancelAddScoreButton" type="button" value="Cancel" onClick="onCancelAddScoreButtonClick();" >
                         </td>
                     </tr>
                 </table>
@@ -135,7 +142,7 @@
         </div>
 
         <template class="singleGame">
-          <td>
+          <td style="vertical-align: top;">
             <table class="gameTable" style="float:left;">
                 <thead>
                     <tr class="gameNumber">
@@ -149,6 +156,14 @@
                             <label class="player2Name" id="p2Name"></label>
                         </th>
                     </tr>
+                    <tr class="gameScores" id="gameScores">
+                        <th>
+                            <label class="p1Total"></label>
+                        </th>
+                        <th>
+                            <label class="p2Total"></label>
+                        </th>
+                    </tr>
                 </thead>
                 <tbody class="boxes">
                     <tr>
@@ -160,16 +175,6 @@
                         </td>
                     </tr>
                 </tbody>
-                <tfoot>
-                    <tr class="gameScores" id="gameScores">
-                        <th>
-                            <label class="p1Total"></label>
-                        </th>
-                        <th>
-                            <label class="p2Total"></label>
-                        </th>
-                    </tr>
-                </tfoot>
             </table>
             </td>
         </template>

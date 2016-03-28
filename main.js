@@ -126,12 +126,9 @@ function isGameOpenForPlayer(gameNumber, player) {
     // Game is open if it has started, and hasn't ended for a specific player.
     var handsWon = (player === "player1") ? getP1HandsArray().length : getP2HandsArray().length;
     var gameHasStarted = handsWon >= gameNumber;
-    console.log("Game has started:", gameHasStarted);
     var gameIsOver = getNumberOfEndedGames() >= gameNumber;
-    console.log("Game is over:", gameIsOver);
     var gameIsOpen = gameHasStarted && !gameIsOver;
-    console.log("Game is open:", gameIsOpen);
-
+    
     return gameIsOpen;
 }
 
@@ -171,28 +168,28 @@ function addScoreToAppropriateTables(winner, handArray) {
     }
 }
 
-function calculateMaxBoxes() {
-    var gameTables = document.getElementsByClassName("gameTables");
-    var max = 0;
-    for (var i=0; i<gameTables.length; i++) {
-        var p1Boxes = gameTables[i].getElementsByClassName("p1Boxes")[0];
-        var p2Boxes = gameTables[i].getElementsByClassName("p2Boxes")[0];
-        var maxBoxes = Math.max(p1Boxes,p2Boxes);
-        max = Math.max(max, maxBoxes);
-    }
-    return max;
-}
+// function calculateMaxBoxes() {
+//     var gameTables = document.getElementsByClassName("gameTables");
+//     var max = 0;
+//     for (var i=0; i<gameTables.length; i++) {
+//         var p1Boxes = gameTables[i].getElementsByClassName("p1Boxes")[0];
+//         var p2Boxes = gameTables[i].getElementsByClassName("p2Boxes")[0];
+//         var maxBoxes = Math.max(p1Boxes.children.length,p2Boxes.children.length);
+//         max = Math.max(max, maxBoxes);
+//     }
+//     return max;
+// }
 
-function fleshOutTables() {
-    var maxBoxes = calculateMaxBoxes();
-    console.log(maxBoxes);
+// function fleshOutTables() {
+//     var maxBoxes = calculateMaxBoxes();
+//     console.log(maxBoxes);
 
-    //TODO: IMPLEMENT
-}
+//     //TODO: IMPLEMENT? Or Just keep scores in header?
+// }
 
 function updateScoreTable(winner, handArray) {
     addScoreToAppropriateTables(winner, handArray);
-    fleshOutTables();
+    //fleshOutTables();
 }
 
 function addHandToArray(winner, hand) {
@@ -295,9 +292,20 @@ function showKnockCard() {
     }
 }
 
+function showSpadesCheckbox() {
+    if (getSpadesAreDouble()) {
+        showVisibilityById("isSpadeCheckboxRow");
+        if (getIsKnockSuitSpades()) {
+            var checkbox = document.getElementById("isSpadeCheckbox")
+            checkbox.checked = true;
+        }
+    }                
+}
+
 function onAddScoreButtonClick() {
     // show and reset Scoresheet
     clearScoresheet();
+    showSpadesCheckbox();
     showScoresheet();
 
     // Hide and reset Knock Card
@@ -307,6 +315,9 @@ function onAddScoreButtonClick() {
 function onCancelAddScoreButtonClick() {
     hideVisibilityById("scoreInputForm");
     showVisibilityById("addScoreButton");
+
+    showKnockCard();
+
 }
 
 function onSubmitScoreButtonClick() {
@@ -319,7 +330,12 @@ function onSubmitScoreButtonClick() {
     hideVisibilityById("scoreInputForm");
     showVisibilityById("addScoreButton");
 
-    resetKnockCardParagraph();
+    if (getUsingKnockCard()) {
+        resetKnockCardParagraph();
+    
+        // SHOW PICK KNOCK CARD BUTTON
+        document.getElementById("generateKnockCardButton").style.display = "block";
+    }
 }
 
 function clearScoresheet() {
